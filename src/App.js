@@ -1,14 +1,22 @@
 import React from "react";
-import "./App.css";
-import Header from "./components/Header";
-import Contact from "./components/Contact";
+import Header from "./components/layout/Header";
+import Contacts from "./components/contact/Contacts";
+import "./components/contact/contact.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Provider from "./context";
+import AddContact from "./components/addContactForm/AddContact";
 
 function App() {
   return (
-    <div style={{ margin: 20 }}>
-      <Contact />
-      <Header title="Contact Manager" />
-    </div>
+    <Provider>
+      <React.Fragment>
+        <Header title="Contact Manager" />
+        <div className="container">
+          <AddContact />
+          <Contacts />
+        </div>
+      </React.Fragment>
+    </Provider>
   );
 }
 
