@@ -1,33 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import Contact from "./Contact";
-import { Consumer } from "../../context";
+import ContactContext from "../../context/contactContext/contactContext";
 
 const Contacts = () => {
-  const deleteContact = (id, dispatch) => {
-    dispatch({ type: "DELETE_CONTACT", payload: id });
-  };
-
+  const { contacts } = useContext(ContactContext);
   return (
-    <Consumer>
-      {value => {
-        const { contacts, dispatch } = value;
-        return (
-          <div className="card card-body mb-3">
-            {contacts.length > 0 ? (
-              contacts.map(contact => (
-                <Contact
-                  key={contact.id}
-                  contact={contact}
-                  deleteContact={() => deleteContact(contact.id, dispatch)}
-                />
-              ))
-            ) : (
-              <h5>No contacts found</h5>
-            )}
-          </div>
-        );
-      }}
-    </Consumer>
+    <div className="card card-body mb-3">
+      {contacts.length > 0 ? (
+        contacts.map(contact => <Contact key={contact.id} contact={contact} />)
+      ) : (
+        <h5>No contacts found</h5>
+      )}
+    </div>
   );
 };
 

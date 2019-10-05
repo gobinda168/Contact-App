@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import FormError from "./FormError";
 import { validationSchema } from "../../validations/formValidation";
+import ContactContext from "../../context/contactContext/contactContext";
+
 const AddContactForm = () => {
+  const {
+    addContact,
+    updatedContact,
+    updateContact,
+    clearContact
+  } = useContext(ContactContext);
+  const [contact, setContact] = useState({
+    name: "",
+    email: "",
+    phone: ""
+  });
+  useEffect(() => {
+    if (updatedContact !== null) return setContact(updatedContact);
+
+    return setContact({
+      name: "",
+      email: "",
+      phone: ""
+    });
+  }, [updatedContact]);
   return (
     <Formik
-      initialValues={{ name: "", email: "", phone: "" }}
+      initialValues={{ ...contact }}
       validationSchema={validationSchema}
+      enableReinitialize={true}
+      updatedContact={updatedContact}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setInterval(() => {
+        if (updatedContact !== null) {
+          updateContact(values);
+          clearContact();
+        } else {
+          addContact(values);
           resetForm();
-          setSubmitting(false);
-        }, 500);
+        }
+        setSubmitting(false);
       }}
     >
-      {({ values, errors, touched, isSubmitting }) => (
+      {({ values, errors, touched, isSubmitting, setValues }) => (
         <Form>
           <div className="form-group">
             <label htmlFor="name">Name </label>
@@ -88,7 +116,7 @@ const AddContactForm = () => {
               className="btn btn-block btn-success mb-3"
               type="submit"
             >
-              Submit
+              {updatedContact !== null ? "Update" : "Submit"}
             </button>
           </div>
         </Form>
